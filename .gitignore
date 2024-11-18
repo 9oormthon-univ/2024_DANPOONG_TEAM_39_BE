@@ -1,0 +1,19 @@
+# HELP.md 파일 제외
+HELP.md
+
+# Gradle 디렉토리와 빌드 폴더 제외
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### IntelliJ IDEA ###
+# IntelliJ IDEA 프로젝트 파일 및 폴더 제외
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
