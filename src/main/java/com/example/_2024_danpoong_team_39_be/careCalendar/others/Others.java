@@ -13,8 +13,8 @@ public class Others {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private boolean caregiver;
     @OneToOne
-    @JoinColumn(name = "calendar_id")  // This will join the "Calendar" entity
+    @JoinColumn(name = "calendar_id")  // This will fillUpMember the "Calendar" entity
     private Calendar calendar;
 }

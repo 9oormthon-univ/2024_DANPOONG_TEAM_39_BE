@@ -17,6 +17,7 @@ public class Meal {
     @Enumerated(EnumType.STRING) // Use EnumType.STRING to persist the enum as a string in the database
     private MealType mealType; // 식사 타입 (예: 아침, 점심, 저녁)
 
+    private boolean caregiver;
     // Calendar와의 관계 설정
     @OneToOne
     @JoinColumn(name = "calendar_id")

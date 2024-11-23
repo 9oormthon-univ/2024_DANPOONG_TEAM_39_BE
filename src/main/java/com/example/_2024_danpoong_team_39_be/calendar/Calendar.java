@@ -6,6 +6,8 @@ import com.example._2024_danpoong_team_39_be.careCalendar.meal.Meal;
 import com.example._2024_danpoong_team_39_be.careCalendar.medication.Medication;
 import com.example._2024_danpoong_team_39_be.careCalendar.others.Others;
 import com.example._2024_danpoong_team_39_be.careCalendar.rest.Rest;
+import com.example._2024_danpoong_team_39_be.domain.CareAssignment;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,23 +25,16 @@ public class Calendar {
 
     @Column(nullable = false)
     private String title; // 일정 제목
-    @Column(nullable = false)
-    private String event_type; // 일정타입 공부, 팀플 등등
+    private String eventType; // 일정타입 공부, 팀플 등등
     @Column(nullable = false)
     private LocalTime startTime; // 시작 시간
-    @PrePersist
-    @PreUpdate
-    private void validateTime() {
-        if (endTime.isBefore(startTime)) {
-            throw new IllegalArgumentException("종료 시간은 시작 시간보다 앞설 수 없습니다.");
-        }
-    }
     @Column(nullable = false)
     private LocalTime endTime; // 종료 시간
     @Column(nullable = false)
     private LocalDate date;// 날짜
     @Enumerated(EnumType.STRING)
     private RepeatCycle repeatCycle;
+    private Boolean isAllday;
     private Boolean isAlarm; // 알림 여부
     private String location; // 위치
     private String memo; // 메모
@@ -69,4 +64,14 @@ public class Calendar {
     private MyCalendar myCalendar;
 
     private String category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "care_assignment_id")
+    @JsonIgnore
+    private CareAssignment careAssignment; // CareAssignment와의 관계
+
+    //돌보미 등록
+    private String name;
+
+
 }

@@ -2,7 +2,10 @@ package com.example._2024_danpoong_team_39_be.login.converter;
 
 
 import com.example._2024_danpoong_team_39_be.domain.Member;
+import com.example._2024_danpoong_team_39_be.login.dto.MemberRequestDTO;
 import com.example._2024_danpoong_team_39_be.login.dto.MemberResponseDTO;
+import lombok.Builder;
+
 
 public class MemberConverter {
 
@@ -18,5 +21,6 @@ public class MemberConverter {
                 .alias(member.getAlias())
                 .build();
     }
+
 }
 

@@ -1,5 +1,6 @@
 package com.example._2024_danpoong_team_39_be.domain;
 
+import com.example._2024_danpoong_team_39_be.calendar.Calendar;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,13 +13,16 @@ import java.util.List;
 //@AllArgsConstructor
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 public class CareAssignment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long care_assignment_id;
+    private Long id;
 
-    @OneToMany(mappedBy = "careAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Member> members = new ArrayList<>();
+    @OneToMany(mappedBy = "careAssignment", fetch = FetchType.LAZY)
+    private List<Calendar> calendars;
+
+    @OneToOne(mappedBy = "careAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Member member;
+
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipient", nullable = false)
@@ -27,9 +31,9 @@ public class CareAssignment {
     @Column(length=50)
     private String relationship;
 
-    public CareAssignment(Long care_assignment_id, List<Member> members, CareRecipient recipient, String relationship) {
-        this.care_assignment_id = care_assignment_id;
-        this.members = members;
+    public CareAssignment(Long id, Member member, CareRecipient recipient, String relationship) {
+        this.id = id;
+        this.member = member;
         this.recipient = recipient;
         this.relationship = relationship;
     }

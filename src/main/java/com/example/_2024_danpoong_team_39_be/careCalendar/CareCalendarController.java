@@ -13,28 +13,28 @@ import java.util.List;
 public class CareCalendarController {
     @Autowired
     private CareCalendarService careCalendarService;
-    // isShared가 true인 모든 일정 조회
+
     @GetMapping("/all")
     public List<Calendar> getAllSharedCareCalendarEvents() {
         return careCalendarService.getAllSharedCalendars();
     }
     //일일 공유 일정
-    @GetMapping("/daily/{date}")
+    @GetMapping("/{date}")
     public List<Calendar> getCareEventsByDate(@PathVariable LocalDate date) {
         return careCalendarService.getCareCalendarEventsByDate(date);
     }
 
-    @GetMapping("/weekly/{date}")
-    public List<Calendar> getWeeklySharedEvents(@PathVariable LocalDate date) {
-        return careCalendarService.getWeeklyCareCalendarEvents(date);
-    }
+//    @GetMapping("/weekly/{date}")
+//    public List<Calendar> getWeeklySharedEvents(@PathVariable LocalDate date) {
+//        return careCalendarService.getWeeklyCareCalendarEvents(date);
+//    }
 
-    @GetMapping("/weekly")
-    public List<Calendar> getWeeklySharedToday(@RequestParam(value = "date", required = false) LocalDate date) {
-        if (date == null) {
-            date = LocalDate.now();
-        }
-        return careCalendarService.getWeeklyCareCalendarEvents(date);
-    }
+//    @GetMapping("/weekly")
+//    public List<Calendar> getWeeklySharedToday(@RequestParam(value = "date", required = false) LocalDate date) {
+//        if (date == null) {
+//            date = LocalDate.now();
+//        }
+//        return careCalendarService.getWeeklyCareCalendarEvents(date);
+//    }
 
 }

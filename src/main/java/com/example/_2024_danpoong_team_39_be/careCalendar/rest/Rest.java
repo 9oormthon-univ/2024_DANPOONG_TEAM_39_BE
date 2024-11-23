@@ -16,7 +16,7 @@ public class Rest {
 
     @Enumerated(EnumType.STRING)
     private RestType restType; // 휴식 종류 (예: 낮잠, 휴식 등)
-
+    private boolean caregiver;
     // Calendar와의 관계 설정
     @OneToOne
     @JoinColumn(name = "calendar_id")

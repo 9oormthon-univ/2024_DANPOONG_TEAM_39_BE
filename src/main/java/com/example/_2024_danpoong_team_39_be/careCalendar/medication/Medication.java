@@ -15,7 +15,7 @@ public class Medication {
     private Long id;
 
     private String medicationType; // 약 종류 (예: 항생제, 진통제 등)
-
+    private boolean caregiver;
     // Calendar와의 관계 설정
     @OneToOne
     @JoinColumn(name = "calendar_id")

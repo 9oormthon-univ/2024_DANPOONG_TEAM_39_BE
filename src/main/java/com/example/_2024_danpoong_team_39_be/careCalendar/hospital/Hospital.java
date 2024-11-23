@@ -18,6 +18,7 @@ public class Hospital {
     @Enumerated(EnumType.STRING)
     private TransportationTpye transportationTpye; // 이동 방식 (예: 자가용, 택시 등)
 
+    private boolean caregiver;
     // Calendar와의 관계 설정
     @OneToOne
     @JoinColumn(name = "calendar_id")

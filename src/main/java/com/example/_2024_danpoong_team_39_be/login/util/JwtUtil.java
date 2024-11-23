@@ -1,11 +1,13 @@
 package com.example._2024_danpoong_team_39_be.login.util;
 
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
@@ -26,6 +28,16 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(secretKey)
                 .compact();
+    }
+
+    // 이메일 추출
+    public String getEmailFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey) // secretKey 그대로 사용
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
     }
 
     // 이하: 대략적으로 만들어 두었고 나중에 사용할 가능성이 높아 그대로 두었음
