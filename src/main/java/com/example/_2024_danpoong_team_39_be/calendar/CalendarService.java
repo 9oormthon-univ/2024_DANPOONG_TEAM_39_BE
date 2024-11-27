@@ -22,6 +22,10 @@ public class CalendarService {
     private CareAssignmentRepository careAssignmentRepository;
     // careAssignmentId로 해당 CareAssignment 객체 조회
 // 특정 날짜의 세부 일정 조회
+    public CareAssignment getCareAssignmentByEmail(String email) {
+        // Assuming that the member's email is stored in the Member entity, which is related to CareAssignment
+        return careAssignmentRepository.findByMemberEmail(email);
+    }
     public List<Calendar> getDailyDetailEvents(LocalDate date, Long id) {
         return calendarRepository.findByDateAndId(date, id);
     }
@@ -31,16 +35,21 @@ public class CalendarService {
     }
 
     // 일정 추가
-    public Calendar addEvent(Calendar calendar) {
+    public Calendar addEvent(Calendar calendar, String email) {
         // CareAssignment가 존재하는지 확인
-
+        if (calendar.getCareAssignment() == null) {
+            throw new IllegalArgumentException("CareAssignment가 필요합니다.");
+        }
 
         // 시간 충돌 검사
         if (isTimeConflict(calendar)) {
             throw new IllegalArgumentException("해당 시간대에 이미 일정이 존재합니다.");
         }
-        // 종일선택시 starttime  수면시작시간 , endTime - 수면종료시간
 
+        // 이메일 설정 (CareAssignment에서 이메일 가져오기)
+        calendar.setEmail(calendar.getCareAssignment().getEmail());  // CareAssignment에서 이메일을 가져옴
+
+        // 종일선택시 startTime과 endTime을 수면시간으로 설정
         if (Boolean.TRUE.equals(calendar.getIsAllday())) {
             calendar.setStartTime(calendar.getCareAssignment().getRecipient().getStartSleepTime());
             calendar.setEndTime(calendar.getCareAssignment().getRecipient().getEndSleepTime());
@@ -79,7 +88,8 @@ public class CalendarService {
                 repeatEvent.setRest(calendar.getRest());
                 repeatEvent.setMedication(calendar.getMedication());
 
-
+                // 이메일 설정 (반복 일정에도 동일한 이메일 적용)
+                repeatEvent.setEmail(calendar.getCareAssignment().getEmail());  // 반복 일정에도 이메일 설정
 
                 // 시간 충돌 검사
                 if (isTimeConflict(repeatEvent)) {
@@ -98,7 +108,6 @@ public class CalendarService {
                 calendar.setDate(LocalDate.now());
             }
 
-
             // 일정 저장
             calendarRepository.save(calendar);
         }
@@ -113,6 +122,7 @@ public class CalendarService {
 
         return calendar;  // 추가된 일정 객체를 반환
     }
+
 
     // 시간 충돌 검사 메서드
     private boolean isTimeConflict(Calendar calendar) {

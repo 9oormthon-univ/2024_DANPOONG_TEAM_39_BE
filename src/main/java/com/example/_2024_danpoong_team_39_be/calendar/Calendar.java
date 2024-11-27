@@ -69,7 +69,7 @@ public class Calendar {
     @JoinColumn(name = "care_assignment_id")
     @JsonIgnore
     private CareAssignment careAssignment; // CareAssignment와의 관계
-
+    private String email;
     //돌보미 등록
     private String name;
 

@@ -34,7 +34,7 @@ public class Member {
     @Column(nullable = false, length = 50)
     private String email;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL) // cascade 설정
     @JoinColumn(name = "care_assignment_id") // CareAssignment에 속함
     private CareAssignment careAssignment;
 

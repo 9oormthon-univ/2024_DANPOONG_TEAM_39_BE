@@ -55,6 +55,8 @@ public class CareRecipient {
         this.address = address;
         this.avgSleepTime = avgSleepTime;
     }
-
+    public CareRecipient(String name) {
+        this.name = name;
+    }
 }
 

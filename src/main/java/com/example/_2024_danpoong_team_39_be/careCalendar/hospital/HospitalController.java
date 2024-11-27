@@ -4,8 +4,11 @@ package com.example._2024_danpoong_team_39_be.careCalendar.hospital;
 import com.example._2024_danpoong_team_39_be.calendar.Calendar;
 import com.example._2024_danpoong_team_39_be.calendar.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/careCalendar/hospital")
@@ -16,8 +19,15 @@ public class HospitalController {
 
     // 특정 날짜의 일정 추가
     @PostMapping("")
-    public ResponseEntity<Calendar> addEvent(@RequestBody Calendar calendar) {
+    public ResponseEntity<Calendar> addEvent(@RequestBody Calendar calendar, Principal principal) {
         try {
+            // 이메일이 일치하는지 확인
+            String loggedInUserEmail = principal.getName(); // 로그인한 사용자의 이메일
+
+            if (!loggedInUserEmail.equals(calendar.getCareAssignment().getEmail())) {
+                // 이메일이 일치하지 않으면 권한 없음 처리
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            }
             if (calendar.getIsShared() == null) {
                 calendar.setIsShared(true);
             }
@@ -27,7 +37,7 @@ public class HospitalController {
             if(hospital.isCaregiver() == false){
                 calendar.setName("지정되지 않음");
             }
-            Calendar savedCalendar = careAssignmentService.addEvent(calendar);
+            Calendar savedCalendar = careAssignmentService.addEvent(calendar, loggedInUserEmail);
             return ResponseEntity.ok(savedCalendar);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null); // 잘못된 요청 처리

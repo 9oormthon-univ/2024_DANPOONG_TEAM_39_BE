@@ -13,5 +13,5 @@ import java.util.Optional;
 public interface CareAssignmentRepository extends JpaRepository<CareAssignment, Long> {
 
     Optional<CareAssignment> findById(Long id);
-
+    CareAssignment findByMemberEmail(String email);
 }

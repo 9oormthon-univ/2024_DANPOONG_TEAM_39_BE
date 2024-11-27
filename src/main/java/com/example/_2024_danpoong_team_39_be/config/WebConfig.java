@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")
                 .allowedHeaders("*")
-                .allowedOrigins("http://localhost:8081", "http://192.168.219.100:8080")  // 실제 IP를 추가
+                .allowedOrigins("http://localhost:8081", "http://34.236.139.89:8080")  // 실제 IP를 추가
                 .allowedMethods("*");
     }
 }
