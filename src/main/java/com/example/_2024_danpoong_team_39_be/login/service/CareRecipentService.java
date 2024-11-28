@@ -82,4 +82,10 @@ public class CareRecipentService {
         log.info("CareRecipient 및 CareAssignment 저장 완료: {}, {}", careRecipient, careAssignment);
         return careRecipient;
     }
+
+    // CareRecipient 조회 (GET 요청)
+    public CareRecipient getCareRecipient(Long id) {
+        return careRecipientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("CareRecipient not found with id " + id));
+    }
 }

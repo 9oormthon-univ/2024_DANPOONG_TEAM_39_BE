@@ -1,5 +1,6 @@
 package com.example._2024_danpoong_team_39_be.serviceRecommendation;
 
+import com.example._2024_danpoong_team_39_be.domain.CareRecipient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,9 @@ public class KakaoGeoController {
     private KakaoGeoService kakaoGeoService;
     private final Random random = new Random();
     @GetMapping("/recommendation")
-    public ResponseEntity<String> searchHospital(@RequestParam String address) {
+    public ResponseEntity<String> searchLocation(@RequestParam String address) {
+        CareRecipient careRecipient = new CareRecipient();
+        careRecipient.setAddress(address);
         // 주소로부터 위도/경도 변환
         String coordinates = kakaoGeoService.getCoordinatesFromAddress(address);
 
