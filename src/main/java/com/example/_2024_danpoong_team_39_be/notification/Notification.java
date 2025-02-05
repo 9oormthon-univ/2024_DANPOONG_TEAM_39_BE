@@ -3,29 +3,47 @@ package com.example._2024_danpoong_team_39_be.notification;
 import com.example._2024_danpoong_team_39_be.calendar.Calendar;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-@Getter
-@Setter
 @Entity
+@Getter @Setter @ToString
+@NoArgsConstructor
 public class Notification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String sender;
-
-    private LocalDateTime createdAt;
-
-    private String contents;        // 채팅 메시지 내용 또는 댓글 내용
+    private Long memberId;
 
     private String message;
 
-    private String startTime;
-    private String endTime;
-    private String date;
+    private String type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Calendar calendarId;
+    @CreatedDate
+    private LocalDateTime createdDate;
+
+    private Long calendarId;
+    private Long couponId;
+    public Notification(Long memberId, String message, String type, Long id) {
+        switch (type) {
+            case "일정":
+                this.calendarId = id;
+                break;
+            case "쿠폰":
+                this.couponId = id;
+                break;
+            default:
+                throw new IllegalArgumentException("공지 타입 입력 오류= " + type);
+        }
+        this.memberId = memberId;
+        this.message = message;
+        this.type = type;
+        this.createdDate = LocalDateTime.now();
+    }
+
 }
