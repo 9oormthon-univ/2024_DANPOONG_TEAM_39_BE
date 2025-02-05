@@ -44,11 +44,11 @@ public class AuthController {
     }
 
 
-  @GetMapping("/api/member/signup")
-    public BaseResponse<MemberResponseDTO.JoinResultDTO> kakaoLogin(@RequestParam("code") String accessCode, HttpServletResponse httpServletResponse) {
-        Member member = authService.oAuthLogin(accessCode, httpServletResponse);
-        return BaseResponse.onSuccess(MemberConverter.toJoinResultDTO(member));
-    }
+//  @GetMapping("/api/member/signup")
+//    public BaseResponse<MemberResponseDTO.JoinResultDTO> kakaoLogin(@RequestParam("code") String accessCode, HttpServletResponse httpServletResponse) {
+//        Member member = authService.oAuthLogin(accessCode, httpServletResponse);
+//        return BaseResponse.onSuccess(MemberConverter.toJoinResultDTO(member));
+//    }
 
 
 
@@ -60,12 +60,12 @@ public class AuthController {
         return BaseResponse.onSuccess(MemberConverter.toJoinResultDTO(member));
     }
 
-    //코드짜려고 가져옴
-//    @GetMapping("/api/member/signup")
-//    public BaseResponse<MemberResponseDTO.JoinResultDTO> kakaoLogin(@RequestParam("code") String accessCode, HttpServletResponse httpServletResponse) {
-//        Member member = authService.oAuthLogin(accessCode, httpServletResponse);
-//        return BaseResponse.onSuccess(MemberConverter.toJoinResultDTO(member));
-//    }
+
+    @GetMapping("/api/member/signup")
+    public BaseResponse<MemberResponseDTO.JoinResultDTO> kakaoLogin(@RequestParam("code") String accessCode, HttpServletResponse httpServletResponse) {
+        Member member = authService.oAuthLogin(accessCode, httpServletResponse);
+        return BaseResponse.onSuccess(MemberConverter.toJoinResultDTO(member));
+    }
 
 
 

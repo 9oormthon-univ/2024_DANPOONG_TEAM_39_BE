@@ -13,18 +13,19 @@ import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 
 // Member domain
-@Setter
+
 @Entity
-@Getter
+@Setter @Getter @ToString
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@AllArgsConstructor
+@AllArgsConstructor
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column
+    private String password;
     @Column(length = 50)
     private String name;
 
@@ -38,7 +39,8 @@ public class Member {
 
     @Column(nullable = false, length = 50)
     private String email;
-
+    @Column
+    private String role;
     @JsonBackReference  // 이 어노테이션으로 순환참조를 방지합니다.
     @OneToOne(mappedBy = "member")
     private CareAssignment careAssignment;

@@ -5,6 +5,9 @@ import com.example._2024_danpoong_team_39_be.calendar.Calendar;
 import com.example._2024_danpoong_team_39_be.calendar.CalendarService;
 import com.example._2024_danpoong_team_39_be.careAssignment.CareAssignmentService;
 import com.example._2024_danpoong_team_39_be.domain.CareAssignment;
+import com.example._2024_danpoong_team_39_be.domain.Member;
+import com.example._2024_danpoong_team_39_be.login.repository.MemberRepository;
+import com.example._2024_danpoong_team_39_be.login.util.JwtUtil;
 import com.example._2024_danpoong_team_39_be.notification.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,7 +30,10 @@ public class CareCalendarController {
     private CareAssignmentService careAssignmentService;
     @Autowired
     private NotificationService notificationService;
-
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private MemberRepository memberRepository;
 
     //공유일정 전체 조회(weekly, daily)
     @GetMapping("/all")
@@ -110,11 +116,42 @@ public class CareCalendarController {
     }
 
     @PostMapping("/rest")
-    public Calendar createRestCalendar(@RequestBody Calendar calendar) {
-        notificationService.notifyCalendar(calendar);
-        return createCalendarByCategory(calendar, "rest");
+    public Calendar createRestCalendar(@RequestBody Calendar calendar, @RequestHeader(value = "Authorization") String token) {
+        // JWT 토큰에서 이메일 추출
+        if (token == null || !token.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+        }
 
+        String jwt = token.substring(7); // "Bearer " 이후의 실제 토큰 값
+        String email = jwtUtil.getEmailFromToken(jwt); // 이메일 추출
+
+        if (email == null) {
+            throw new IllegalArgumentException("유효한 사용자를 찾을 수 없습니다.");
+        }
+
+        // 이메일을 memberId로 사용
+        // Long memberId = getMemberIdFromEmail(email); // 이메일을 Long으로 변환하는 방법 (필요시)
+
+        // careAssignmentId에 해당하는 멤버 찾기
+        Long careAssignmentId = calendar.getCareAssignmentId();
+        Member member = memberRepository.findByCareAssignmentId(careAssignmentId);
+
+        if (member != null) {
+            // 멤버가 존재하면 알림 전송
+            notificationService.notifyCalendar(calendar);
+        } else {
+            // 해당 careAssignmentId에 해당하는 멤버가 없으면 알림 처리 안 함
+            throw new IllegalArgumentException("해당 careAssignmentId에 해당하는 멤버를 찾을 수 없습니다.");
+        }
+
+        // 새 일정 생성 (DB에 저장)
+        Calendar createdCalendar = createCalendarByCategory(calendar, "rest");
+
+        return createdCalendar;
     }
+
+
+
 
     @PostMapping("/hospital")
     public Calendar createHospitalCalendar(@RequestBody Calendar calendar) {
