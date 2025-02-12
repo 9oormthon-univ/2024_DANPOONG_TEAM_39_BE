@@ -28,14 +28,10 @@ public class Notification {
     private LocalDateTime createdDate;
 
     private Long calendarId;
-    private Long couponId;
     public Notification(Long memberId, String message, String type, Long id) {
         switch (type) {
             case "일정":
                 this.calendarId = id;
-                break;
-            case "쿠폰":
-                this.couponId = id;
                 break;
             default:
                 throw new IllegalArgumentException("공지 타입 입력 오류= " + type);

@@ -78,7 +78,7 @@ public class NotificationService {
     @Transactional
     public void notifyCalendar(Calendar calendar) {
         List<Member> members = memberRepository.findAll();
-        String data = String.format("[%s] 이벤트가 등록되었습니다.", calendar.getTitle());
+        String data = String.format("[%s] 일정이 등록되었습니다.", calendar.getTitle());
 
         for (Member member : members) {
             SseEmitter sseEmitterReceiver = sseEmitters.get(member.getId());
